@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+    POSTGRES_DB: ${POSTGRES_DB:-hhbot}
+    POSTGRES_USER: ${POSTGRES_USER:-hhbot}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpass123}
+    ports: ["5542:5432"]     # 5432 часто занят на macOS
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hhbot -d hhbot -h 127.0.0.1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
+
+  redis:
+    image: redis:7
+    ports: ["6380:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  backend:
+    build: .
+    env_file: [.env.dev]
+    environment:
+      - ENV_FILE=/app/.env
+    command: >
+      sh -lc "alembic -c /app/alembic.ini upgrade head || true;
+              exec uvicorn --app-dir /app/backend app.main:app --host 0.0.0.0 --port 8000 --reload"
+    ports: ["8001:8000"]
+    volumes:
+      - ./backend:/app/backend
+      - ./adminka:/app/adminka
+      - ./alembic.ini:/app/alembic.ini
+      - ./.env.dev:/app/.env:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # Локальный бот включай ТОЛЬКО с DEV-токеном (иначе 409 с продом)
+  # front_bot:
+  #   build: .
+  #   env_file: [.env.dev]
+  #   command: python main.py
+  #   depends_on: [backend, redis, db]
+  #   profiles: ["bot"]
+
+volumes:
+  pgdata_dev:

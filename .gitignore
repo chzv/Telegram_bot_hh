@@ -1,0 +1,62 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.so
+*.orig
+
+# Virtual env
+.venv/
+venv/
+env/
+.env/
+.env.*
+pip-wheel-metadata/
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+.wheelhouse/
+
+# Logs / runtime / local DB
+*.log
+logs/
+*.pid
+*.sqlite3
+*.db
+
+# Jupyter / data
+.ipynb_checkpoints/
+*.ipynb_convert/
+*.checkpoint.ipynb
+
+# Coverage / test
+.coverage
+.tox/
+.pytest_cache/
+htmlcov/
+.cache/
+
+# IDE / OS
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Backups & artifacts
+db_backups/
+backups/
+**/backups/
+hhbot-support*/    # если это артефакты/временные каталоги
+reports/
+artifacts/
+
+# Env & secrets 
+*.env
+.env.*
+!*.env.example
