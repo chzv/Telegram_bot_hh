@@ -29,11 +29,6 @@ logs/
 *.sqlite3
 *.db
 
-# Jupyter / data
-.ipynb_checkpoints/
-*.ipynb_convert/
-*.checkpoint.ipynb
-
 # Coverage / test
 .coverage
 .tox/
@@ -46,15 +41,6 @@ htmlcov/
 .idea/
 *.iml
 .DS_Store
-Thumbs.db
-
-# Backups & artifacts
-db_backups/
-backups/
-**/backups/
-hhbot-support*/    # если это артефакты/временные каталоги
-reports/
-artifacts/
 
 # Env & secrets 
 *.env
